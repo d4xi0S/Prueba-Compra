@@ -1,0 +1,870 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100d19">
+<title>ECP | Configura tu pedido</title>
+
+<style>
+:root {
+  --bg: #100d19;
+  --panel: #191425;
+  --panel2: #211a30;
+  --border: #382c4b;
+  --purple: #a855f7;
+  --green: #38e58b;
+  --text: #f8f5ff;
+  --muted: #aaa0bb;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 25px 14px 45px;
+  color: var(--text);
+  background: radial-gradient(ellipse at top, #2b1741 0%, var(--bg) 48%);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.container {
+  max-width: 760px;
+  margin: auto;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.logo {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 14px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #b44cff, #6d28d9);
+  font-size: 26px;
+  font-weight: 900;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(26px, 6vw, 35px);
+  letter-spacing: -1px;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 10px auto 0;
+  max-width: 520px;
+}
+
+.progress {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 22px 0;
+}
+
+.progress span {
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: #ffffff08;
+  border: 1px solid var(--border);
+  color: #c8bdd7;
+  font-size: 11px;
+}
+
+.section {
+  padding: 21px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  background: #191425ed;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 17px;
+}
+
+.step {
+  width: 35px;
+  height: 35px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid #a855f750;
+  border-radius: 11px;
+  background: #a855f718;
+  color: #d8b4fe;
+  font-weight: 800;
+}
+
+h2 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.section-description {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.option {
+  width: 100%;
+  min-height: 67px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px;
+  color: var(--text);
+  text-align: left;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+
+.option:hover {
+  background: var(--panel2);
+  border-color: #75538f;
+}
+
+.option.selected {
+  background: #38e58b08;
+  border-color: var(--green);
+  box-shadow: inset 0 0 0 1px #38e58b20;
+}
+
+.radio {
+  width: 23px;
+  height: 23px;
+  flex: 0 0 23px;
+  border: 2px solid #766a87;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+.option.selected .radio {
+  border-color: var(--green);
+}
+
+.option.selected .radio::after {
+  content: "";
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.option-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.option-name {
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 750;
+}
+
+.option-detail {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.option-price {
+  flex-shrink: 0;
+  text-align: right;
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.small-note {
+  margin: 12px 2px 0;
+  color: #a99bb9;
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+.device-field {
+  margin-top: 19px;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.text-input {
+  width: 100%;
+  padding: 13px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #100d19;
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+}
+
+.text-input:focus {
+  border-color: var(--purple);
+}
+
+.secondary-button {
+  margin-top: 10px;
+  padding: 10px 13px;
+  border: 1px solid #765098;
+  border-radius: 9px;
+  background: #a855f713;
+  color: #e1c5ff;
+  font-size: 11px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.text-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: #cba4ff;
+  font-size: 11px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.summary {
+  padding: 22px 20px;
+  margin-top: 21px;
+  border: 1px solid #704493;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #28183d, #191425);
+}
+
+.summary h2 {
+  margin-bottom: 17px;
+  font-size: 19px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 11px 0;
+  border-bottom: 1px solid #ffffff10;
+  font-size: 12px;
+}
+
+.summary-row span:first-child {
+  color: var(--muted);
+}
+
+.summary-row span:last-child {
+  max-width: 65%;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-top: 20px;
+}
+
+.total-row strong {
+  font-size: 15px;
+}
+
+.total-price {
+  color: var(--green);
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.primary-button {
+  width: 100%;
+  min-height: 52px;
+  margin-top: 20px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(100deg, #a855f7, #7c3aed);
+  color: white;
+  font-size: 14px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.primary-button:hover { filter: brightness(1.08); }
+
+.notice {
+  display: none;
+  margin-top: 14px;
+  padding: 13px;
+  border-radius: 10px;
+  border: 1px solid #a855f755;
+  background: #a855f710;
+  color: #e8d5ff;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.notice.show { display: block; }
+
+.disclaimer {
+  margin: 13px 0 0;
+  text-align: center;
+  color: #9c90aa;
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+footer {
+  margin-top: 22px;
+  text-align: center;
+  color: #7e738b;
+  font-size: 10px;
+}
+
+@media (min-width: 560px) {
+  .options.two-columns {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 390px) {
+  .section { padding: 16px 13px; }
+  .option { gap: 9px; padding: 11px 9px; }
+  .option-price { font-size: 11px; }
+}
+</style>
+</head>
+
+<body>
+<main class="container">
+  <header>
+    <div class="logo">E</div>
+    <h1>Configura tu pedido</h1>
+    <p class="subtitle">
+      Elige el producto, selecciona tu dispositivo y revisa el importe
+      antes de continuar. El total se calcula en esta página.
+    </p>
+  </header>
+
+  <nav class="progress" aria-label="Pasos del pedido">
+    <span>1 · Producto</span>
+    <span>2 · Dispositivo</span>
+    <span>3 · Pago</span>
+    <span>4 · Protección</span>
+    <span>5 · Renovación</span>
+  </nav>
+
+  <section class="section">
+    <div class="section-heading">
+      <div class="step">1</div>
+      <div>
+        <h2>Producto</h2>
+        <p class="section-description">Selecciona un solo certificado o producto.</p>
+      </div>
+    </div>
+    <div id="products" class="options"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-heading">
+      <div class="step">2</div>
+      <div>
+        <h2>Tipo de dispositivo</h2>
+        <p class="section-description">Selecciona el dispositivo que registrarás.</p>
+      </div>
+    </div>
+
+    <div id="devices" class="options two-columns"></div>
+
+    <div class="device-field">
+      <label for="udid" class="field-label">UDID del dispositivo</label>
+      <input
+        id="udid"
+        class="text-input"
+        type="text"
+        autocomplete="off"
+        autocapitalize="characters"
+        spellcheck="false"
+        placeholder="Introduce tu UDID manualmente"
+      >
+      <button id="fetchDetails" class="secondary-button" type="button">
+        Obtener detalles del dispositivo
+      </button>
+      <p class="small-note">
+        Por seguridad, esta página no intenta leer automáticamente el UDID
+        desde Safari. El registro debe validarse en el servidor antes de
+        procesar el pedido.
+      </p>
+      <a id="udidHelp" class="text-link" href="#udid-help">
+        ¿Cómo encuentro mi UDID?
+      </a>
+      <p id="udid-help" class="small-note">
+        Puedes obtener el UDID usando un método compatible con tu dispositivo
+        y copiarlo en el campo anterior. No introduzcas contraseñas ni datos
+        de tu cuenta de Apple aquí.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-heading">
+      <div class="step">3</div>
+      <div>
+        <h2>Método de pago</h2>
+        <p class="section-description">Selecciona una sola forma de pago.</p>
+      </div>
+    </div>
+    <div id="payments" class="options"></div>
+  </section>
+
+  <section class="section">
+    <div class="section-heading">
+      <div class="step">4</div>
+      <div>
+        <h2>Protección contra revocaciones</h2>
+        <p class="section-description">
+          Las opciones cambian según el producto seleccionado.
+        </p>
+      </div>
+    </div>
+    <div id="protections" class="options"></div>
+    <p id="protectionNote" class="small-note"></p>
+  </section>
+
+  <section class="section">
+    <div class="section-heading">
+      <div class="step">5</div>
+      <div>
+        <h2>Renovación automática</h2>
+        <p class="section-description">
+          Elige si deseas solicitar la renovación automática.
+        </p>
+      </div>
+    </div>
+    <div id="renewals" class="options two-columns"></div>
+    <p class="small-note">
+      Esta selección solo representa tu preferencia. La renovación real
+      requiere consentimiento explícito y configuración del proveedor.
+    </p>
+  </section>
+
+  <section class="summary">
+    <h2>Resumen del pedido</h2>
+
+    <div class="summary-row">
+      <span>Producto</span>
+      <span id="sumProduct">Basic Certificate</span>
+    </div>
+    <div class="summary-row">
+      <span>Dispositivo</span>
+      <span id="sumDevice">iPhone</span>
+    </div>
+    <div class="summary-row">
+      <span>UDID</span>
+      <span id="sumUdid">Pendiente</span>
+    </div>
+    <div class="summary-row">
+      <span>Método de pago</span>
+      <span id="sumPayment">PayPal</span>
+    </div>
+    <div class="summary-row">
+      <span>Protección</span>
+      <span id="sumProtection">30 días</span>
+    </div>
+    <div class="summary-row">
+      <span>Renovación automática</span>
+      <span id="sumRenewal">No</span>
+    </div>
+    <div class="summary-row">
+      <span>Precio del producto</span>
+      <span id="basePrice">US$2.00</span>
+    </div>
+    <div class="summary-row">
+      <span>Protección adicional</span>
+      <span id="protectionPrice">US$0.00</span>
+    </div>
+    <div class="summary-row">
+      <span>Recargo de pago</span>
+      <span id="paymentFee">US$0.00</span>
+    </div>
+
+    <div class="total-row">
+      <strong>Total</strong>
+      <span id="total" class="total-price">US$2.00</span>
+    </div>
+
+    <button id="checkout" class="primary-button" type="button">
+      Revisar pedido · US$2.00
+    </button>
+
+    <div id="notice" class="notice" role="status" aria-live="polite"></div>
+
+    <p class="disclaimer">
+      Todavía no hay un proveedor de pago conectado. Este formulario no cobra,
+      no almacena datos de tarjeta y no confirma compras. No introduzcas datos
+      bancarios aquí.
+    </p>
+  </section>
+
+  <footer>ECP · Configuración de pedido</footer>
+</main>
+
+<script>
+"use strict";
+
+const products = [
+  {
+    id: "basic",
+    name: "Basic Certificate",
+    detail: "Certificado básico · anual",
+    price: 2,
+    protections: [
+      { id: "30", name: "30 Day Unlimited Revoke Protection", short: "30 días", price: 0 },
+      { id: "60", name: "60 Day Unlimited Revoke Protection", short: "60 días", price: 1 },
+      { id: "90", name: "90 Day Unlimited Revoke Protection", short: "90 días", price: 1.5 },
+      { id: "180", name: "180 Day Unlimited Revoke Protection", short: "180 días", price: 2.5 },
+      { id: "365", name: "1 Year Unlimited Revoke Protection", short: "1 año", price: 4 }
+    ]
+  },
+  {
+    id: "jit",
+    name: "JIT Certificate",
+    detail: "Certificado JIT · anual",
+    price: 7,
+    protections: [
+      { id: "none", name: "Ninguna", short: "Ninguna", price: 0 },
+      { id: "30", name: "30 Day Unlimited Revoke Protection", short: "30 días", price: 1.5 },
+      { id: "once", name: "One-Time Revoke Protection", short: "Protección única", price: 3 }
+    ]
+  },
+  {
+    id: "ppqless",
+    name: "PPQLESS Certificate",
+    detail: "Certificado PPQLESS · anual",
+    price: 7,
+    protections: [
+      { id: "none", name: "Ninguna", short: "Ninguna", price: 0 },
+      { id: "30", name: "30 Day Unlimited Revoke Protection", short: "30 días", price: 1.5 },
+      { id: "once", name: "One-Time Revoke Protection", short: "Protección única", price: 3 }
+    ]
+  },
+  {
+    id: "jit-ppqless",
+    name: "JIT PPQLESS Certificate",
+    detail: "JIT + PPQLESS · anual",
+    price: 11,
+    protections: [
+      { id: "none", name: "Ninguna", short: "Ninguna", price: 0 },
+      { id: "30", name: "30 Day Unlimited Revoke Protection", short: "30 días", price: 1.5 },
+      { id: "once", name: "One-Time Revoke Protection", short: "Protección única", price: 3 }
+    ]
+  },
+  {
+    id: "developer",
+    name: "Apple Developer Account",
+    detail: "Cuenta Apple Developer",
+    price: 200,
+    protections: [],
+    info: "Después del pago, se enviará un recibo a su correo electrónico. Abra un ticket en nuestro servidor Discord para recibir su producto."
+  }
+];
+
+const devices = [
+  { id: "iphone", name: "iPhone", detail: "Dispositivo iPhone" },
+  { id: "ipad", name: "iPad", detail: "Dispositivo iPad" }
+];
+
+const payments = [
+  { id: "paypal", name: "PayPal", detail: "Paga con PayPal", fee: 0 },
+  { id: "applepay", name: "Apple Pay", detail: "Disponible cuando el navegador y el proveedor lo admitan", fee: 1.5 },
+  { id: "card", name: "Tarjeta de crédito o débito", detail: "Recargo de US$0.50", fee: 0.5 }
+];
+
+/* CAMBIO 2: opciones de renovación automática */
+const renewals = [
+  { id: "no", name: "No", detail: "No renovar automáticamente." },
+  { id: "yes", name: "Sí", detail: "Renovar Automáticamente." }
+];
+
+const state = {
+  product: "basic",
+  device: "iphone",
+  payment: "paypal",
+  protection: "30",
+  renewal: "no"
+};
+
+const $ = id => document.getElementById(id);
+const find = (list, id) => list.find(item => item.id === id);
+const money = amount => "US$" + Number(amount).toFixed(2);
+
+function currentProduct() {
+  return find(products, state.product);
+}
+
+function currentProtection() {
+  return find(currentProduct().protections, state.protection);
+}
+
+function makeOption(item, selected, priceText, onClick) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "option" + (selected ? " selected" : "");
+  button.setAttribute("aria-pressed", selected ? "true" : "false");
+
+  const radio = document.createElement("span");
+  radio.className = "radio";
+  radio.setAttribute("aria-hidden", "true");
+
+  const info = document.createElement("span");
+  info.className = "option-info";
+
+  const name = document.createElement("div");
+  name.className = "option-name";
+  name.textContent = item.name;
+  info.appendChild(name);
+
+  if (item.detail) {
+    const detail = document.createElement("div");
+    detail.className = "option-detail";
+    detail.textContent = item.detail;
+    info.appendChild(detail);
+  }
+
+  const price = document.createElement("span");
+  price.className = "option-price";
+  price.textContent = priceText;
+
+  button.append(radio, info, price);
+  button.addEventListener("click", onClick);
+  return button;
+}
+
+function renderProducts() {
+  const root = $("products");
+  root.replaceChildren();
+
+  products.forEach(product => {
+    root.appendChild(makeOption(
+      product,
+      state.product === product.id,
+      product.id === "developer"
+        ? money(product.price)
+        : "Desde " + money(product.price) + " / año",
+      () => {
+        state.product = product.id;
+
+        const available = currentProduct().protections;
+        if (!available.some(p => p.id === state.protection)) {
+          state.protection = available.length ? available[0].id : "";
+        }
+
+        renderAll();
+      }
+    ));
+  });
+}
+
+function renderDevices() {
+  const root = $("devices");
+  root.replaceChildren();
+
+  devices.forEach(device => {
+    root.appendChild(makeOption(
+      device,
+      state.device === device.id,
+      "",
+      () => {
+        state.device = device.id;
+        renderAll();
+      }
+    ));
+  });
+}
+
+function renderPayments() {
+  const root = $("payments");
+  root.replaceChildren();
+
+  payments.forEach(payment => {
+    root.appendChild(makeOption(
+      payment,
+      state.payment === payment.id,
+      payment.fee === 0 ? "Sin recargo" : "+" + money(payment.fee),
+      () => {
+        state.payment = payment.id;
+        renderAll();
+      }
+    ));
+  });
+}
+
+function renderProtections() {
+  const root = $("protections");
+  root.replaceChildren();
+
+  const product = currentProduct();
+
+  if (!product.protections.length) {
+    const message = document.createElement("p");
+    message.className = "small-note";
+    message.textContent =
+      "No hay opciones de protección configuradas para este producto.";
+    root.appendChild(message);
+    $("protectionNote").textContent = product.info || "";
+    return;
+  }
+
+  product.protections.forEach(protection => {
+    const label = protection.price === 0
+      ? (protection.id === "none" ? "Sin coste" : "Gratis")
+      : "+" + money(protection.price);
+
+    root.appendChild(makeOption(
+      protection,
+      state.protection === protection.id,
+      label,
+      () => {
+        state.protection = protection.id;
+        renderAll();
+      }
+    ));
+  });
+
+  let note = "";
+
+  if (product.id === "basic") {
+    note = "La protección elegida estará sujeta a las condiciones y duración del proveedor.";
+  } else if (state.protection === "once") {
+    note = "Al comprar esta protección única, se solicitará la inscripción del dispositivo una vez que su certificado haya sido revocado. El cumplimiento depende de las condiciones del proveedor.";
+  } else if (state.protection === "none") {
+    note = "Ha seleccionado Ninguna. No estará cubierto por ninguna revocación de certificado.";
+  } else {
+    note = "La protección está sujeta a la duración y los términos del proveedor.";
+  }
+
+  $("protectionNote").textContent = note;
+}
+
+function renderRenewals() {
+  const root = $("renewals");
+  root.replaceChildren();
+
+  renewals.forEach(item => {
+    root.appendChild(makeOption(
+      item,
+      state.renewal === item.id,
+      "",
+      () => {
+        state.renewal = item.id;
+        renderAll();
+      }
+    ));
+  });
+}
+
+function renderSummary() {
+  const product = currentProduct();
+  const device = find(devices, state.device);
+  const payment = find(payments, state.payment);
+  const protection = currentProtection();
+
+  $("sumProduct").textContent = product.name;
+  $("sumDevice").textContent = device.name;
+  $("sumUdid").textContent = $("udid").value.trim() || "Pendiente";
+  $("sumPayment").textContent = payment.name;
+  $("sumProtection").textContent = protection
+    ? protection.short
+    : "No disponible";
+
+  /* CAMBIO: el resumen muestra exactamente Sí o No */
+  $("sumRenewal").textContent = state.renewal === "yes" ? "Sí" : "No";
+
+  $("basePrice").textContent = money(product.price);
+  $("protectionPrice").textContent = money(protection ? protection.price : 0);
+  $("paymentFee").textContent = money(payment.fee);
+
+  const total =
+    product.price +
+    (protection ? protection.price : 0) +
+    payment.fee;
+
+  $("total").textContent = money(total);
+  $("checkout").textContent = "Revisar pedido · " + money(total);
+
+  $("notice").classList.remove("show");
+  $("notice").textContent = "";
+}
+
+function renderAll() {
+  renderProducts();
+  renderDevices();
+  renderPayments();
+  renderProtections();
+  renderRenewals();
+  renderSummary();
+}
+
+$("udid").addEventListener("input", renderSummary);
+
+$("fetchDetails").addEventListener("click", () => {
+  $("notice").textContent =
+    "La obtención automática del UDID no está configurada en esta página. " +
+    "Introduce el UDID manualmente. No se ha leído ni enviado información del dispositivo.";
+  $("notice").classList.add("show");
+});
+
+$("checkout").addEventListener("click", () => {
+  const product = currentProduct();
+  const protection = currentProtection();
+  const udid = $("udid").value.trim();
+
+  if (product.id !== "developer" && !protection) {
+    $("notice").textContent =
+      "No hay una protección configurada para este producto. Contacta al administrador antes de continuar.";
+  } else if (!udid) {
+    $("notice").textContent =
+      "Antes de continuar, introduce el UDID del dispositivo que deseas registrar. El pedido todavía no se enviará ni se cobrará.";
+  } else {
+    $("notice").textContent =
+      "Pedido revisado localmente. El proveedor de pago y la validación del UDID todavía no están conectados. No se ha realizado ningún cobro ni se ha enviado el UDID.";
+  }
+
+  $("notice").classList.add("show");
+});
+
+renderAll();
+</script>
+</body>
+</html>
