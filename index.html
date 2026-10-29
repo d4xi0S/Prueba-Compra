@@ -1,372 +1,581 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#100d19">
-<title>ECP | Configura tu pedido</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#100b19">
+  <meta name="description" content="ECP: certificados, herramientas y servicios para el mundo iPhone.">
+  <title>ECP — Tu mundo iPhone</title>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --fondo: #100b19;
+      --panel: rgba(35, 24, 51, .55);
+      --panel2: rgba(63, 43, 87, .48);
+      --borde: rgba(210, 183, 255, .20);
+      --morado: #b58aff;
+      --texto: #fbf8ff;
+      --suave: #d0c4df;
+      --verde: #75e0b0;
+      --rojo: #ffaaaa;
+      --cristal: linear-gradient(135deg, rgba(255,255,255,.10), rgba(167,121,255,.035) 45%, rgba(255,255,255,.015));
+      --sombra-cristal: 0 18px 55px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.13);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 130px; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 10% 8%, rgba(127,72,205,.18), transparent 34%),
+        radial-gradient(ellipse at 90% 40%, rgba(83,48,140,.14), transparent 38%),
+        var(--fondo);
+      background-attachment: fixed;
+      color: var(--texto);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { opacity: .55; cursor: wait; }
+    [hidden] { display: none !important; }
+    .contenedor { width: min(1100px, 92%); margin: auto; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(20, 13, 31, .72);
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      box-shadow: 0 8px 35px rgba(0,0,0,.12);
+      -webkit-backdrop-filter: blur(28px) saturate(165%);
+      backdrop-filter: blur(28px) saturate(165%);
+    }
+
+    .barra {
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 16px;
+      padding: 12px 0 10px;
+    }
+
+    .logo {
+      font-size: 30px;
+      font-weight: 900;
+      font-style: italic;
+      letter-spacing: -1.5px;
+      color: transparent;
+      background: linear-gradient(110deg, #ffffff 0%, #d8c5ff 42%, #a879ff 72%, #7b4dff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      flex-shrink: 0;
+      text-shadow: 0 0 28px rgba(167,121,255,.22);
+    }
+    .logo span { color: #a879ff; -webkit-text-fill-color:#a879ff; }
+    .ecp-top-brand { display:inline-flex; align-items:center; padding-right:12px; text-decoration:none; flex:0 0 auto; }
+    .ecp-top-brand-name { display:inline-block; font-size:26px; font-weight:950; font-style:italic; letter-spacing:-1.5px; line-height:1; color:transparent; background:linear-gradient(110deg,#fff 0%,#d9c6ff 42%,#a879ff 72%,#7b4dff 100%); -webkit-background-clip:text; background-clip:text; text-shadow:0 0 22px rgba(167,121,255,.22); }
+    .acceso-superior { display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-left: auto; }
+    .ecp-login-brand { display:inline-flex; align-items:center; text-decoration:none; flex:0 0 auto; }
+    .ecp-login-brand .ecp-top-brand-name { font-size:26px; }
+    .navegacion {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      padding: 0 0 12px;
+    }
+    nav { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: center; font-size: 13px; color: var(--suave); }
+    nav a { padding: 9px 15px; border:1px solid rgba(255,255,255,.075); border-radius: 30px; background:rgba(255,255,255,.025); transition: background .25s, color .25s, border-color .25s; }
+    nav a:hover, footer a:hover { color: var(--morado); }
+    nav a:hover { background: rgba(167,121,255,.13); }
+
+    .boton {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 42px;
+      padding: 10px 15px;
+      border: 1px solid rgba(255,255,255,.17);
+      border-radius: 14px;
+      background: linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.025)), rgba(45,31,64,.56);
+      color: white;
+      font-weight: 750;
+      font-size: 13px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 6px 18px rgba(0,0,0,.15);
+      -webkit-backdrop-filter: blur(16px) saturate(150%);
+      backdrop-filter: blur(16px) saturate(150%);
+      transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+    }
+    .boton:hover {
+      transform: translateY(-2px);
+      border-color: rgba(196,158,255,.55);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 10px 30px rgba(117,66,190,.20);
+    }
+    .boton.primario {
+      color: #fff;
+      border-color: rgba(255,255,255,.25);
+      background: linear-gradient(135deg, rgba(204,170,255,.94), rgba(135,82,219,.85));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.42), 0 8px 28px rgba(143,87,225,.28);
+    }
+    .boton.discord { background: linear-gradient(135deg, rgba(112,126,255,.95), rgba(74,86,205,.86)); }
+    .boton.google { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); }
+    .boton.github { background: #24242b; border: 1px solid rgba(255,255,255,.14); }
+    .ecp-oauth-opciones { display: grid; gap: 10px; margin-top: 18px; }
+    .ecp-oauth-opciones .boton { display:flex; align-items:center; justify-content:center; gap:12px; min-height:52px; }
+    .ecp-oauth-icon { width:24px; height:24px; flex:0 0 24px; display:inline-flex; align-items:center; justify-content:center; }
+    .ecp-oauth-icon svg { width:24px; height:24px; display:block; }
+    .ecp-oauth-label { flex:1; text-align:left; }
+    .ecp-oauth-arrow { opacity:.8; font-size:20px; line-height:1; }
+    .ecp-oauth-nota { margin-top: 12px; font-size: 12px; line-height: 1.5; color: var(--suave); }
+    .ancho { width: 100%; }
+
+    #ecp-usuario-superior { align-items: center; justify-content: flex-end; gap: 10px; min-width: 0; flex-wrap: nowrap; }
+    #ecp-usuario-superior:not([hidden]) { display: flex; }
+    #ecp-email-superior { color: var(--suave); font-size: 12px; max-width: 200px; overflow-wrap: anywhere; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 90px 0 70px;
+      background:
+        radial-gradient(ellipse at 78% 15%, rgba(153,95,255,.24), transparent 40%),
+        radial-gradient(ellipse at 10% 80%, rgba(97,57,166,.20), transparent 45%);
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      top: 30px;
+      right: -100px;
+      border-radius: 50%;
+      background: rgba(167,121,255,.10);
+      filter: blur(65px);
+      pointer-events: none;
+    }
+    .hero .contenedor { position: relative; z-index: 1; }
+    .etiqueta { color: var(--morado); font-size: 11px; letter-spacing: 2px; font-weight: 800; }
+    h1 { max-width: 760px; margin: 18px 0; font-size: clamp(42px, 8vw, 76px); line-height: 1.04; letter-spacing: -3px; }
+    h1 span { color: #c4a0ff; text-shadow: 0 0 42px rgba(167,121,255,.24); }
+    h2 { font-size: clamp(27px, 4vw, 38px); line-height: 1.2; letter-spacing: -1px; }
+    h3 { line-height: 1.3; }
+    .descripcion { max-width: 650px; color: var(--suave); font-size: 17px; }
+    .aviso {
+      margin: 25px 0 0;
+      padding: 18px;
+      border: 1px solid rgba(244,199,117,.24);
+      background: rgba(95,66,30,.18);
+      color: #f4d7a2;
+      border-radius: 20px;
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 12px 35px rgba(0,0,0,.12);
+    }
+
+    section { padding: 65px 0; }
+    .encabezado-seccion { margin-bottom: 28px; }
+    .encabezado-seccion p { color: var(--suave); }
+    .rejilla { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .tarjeta {
+      position: relative;
+      overflow: hidden;
+      padding: 22px;
+      border: 1px solid rgba(224,203,255,.16);
+      border-radius: 24px;
+      background: var(--cristal), rgba(30,21,43,.48);
+      box-shadow: var(--sombra-cristal);
+      -webkit-backdrop-filter: blur(22px) saturate(145%);
+      backdrop-filter: blur(22px) saturate(145%);
+      min-width: 0;
+      transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+    .tarjeta::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(125deg, rgba(255,255,255,.08), transparent 34%, transparent 72%, rgba(167,121,255,.06));
+      pointer-events: none;
+    }
+    .tarjeta:hover {
+      transform: translateY(-5px);
+      border-color: rgba(190,150,255,.40);
+      box-shadow: 0 22px 55px rgba(0,0,0,.27), 0 0 28px rgba(167,121,255,.08), inset 0 1px 0 rgba(255,255,255,.18);
+    }
+    .tarjeta > * { position: relative; }
+    .tarjeta p { color: var(--suave); font-size: 14px; }
+    .tarjeta h3 { margin: 10px 0; }
+    .precio { font-size: 21px; font-weight: 850; color: #c7a4ff; text-shadow: 0 0 24px rgba(167,121,255,.16); }
+    .categoria { font-size: 10px; letter-spacing: 1.6px; color: var(--morado); font-weight: 850; }
+    .nota { margin-top: 22px; color: var(--suave); font-size: 12px; }
+    .icono { font-size: 28px; }
+    .estado {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 5px 9px;
+      border: 1px solid rgba(167,121,255,.18);
+      border-radius: 20px;
+      background: rgba(167,121,255,.12);
+      color: #d8c1ff;
+      font-size: 11px;
+      font-weight: 750;
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+    }
+
+    .pregunta {
+      padding: 18px 20px;
+      margin: 10px 0;
+      border: 1px solid rgba(224,203,255,.12);
+      border-radius: 17px;
+      background: rgba(255,255,255,.025);
+      transition: background .2s, border-color .2s;
+    }
+    .pregunta[open] { border-color: rgba(167,121,255,.30); background: rgba(167,121,255,.055); }
+    .pregunta summary { cursor: pointer; font-weight: 750; }
+    .pregunta summary::marker { color: var(--morado); }
+    .pregunta p { color: var(--suave); font-size: 14px; }
+
+    .legal { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .legal article {
+      padding: 20px;
+      border: 1px solid rgba(224,203,255,.16);
+      border-radius: 18px;
+      background: rgba(255,255,255,.035);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+    .legal p { color: var(--suave); font-size: 13px; }
+
+    footer {
+      padding: 35px 0;
+      border-top: 1px solid rgba(255,255,255,.10);
+      background: rgba(12,8,19,.28);
+      color: var(--suave);
+      font-size: 12px;
+    }
+    footer .logo { display: inline-block; }
+    .pequeno { font-size: 11px; }
+    .centrado { text-align: center; }
+    .suave { color: var(--suave); }
+
+    /* Modal de acceso */
+    #ecp-modal {
+      width: min(460px, calc(100% - 28px));
+      max-height: 90vh;
+      max-height: 90dvh;
+      overflow-y: auto;
+      padding: 0;
+      border: 1px solid rgba(214,187,255,.28);
+      border-radius: 28px;
+      background:
+        radial-gradient(ellipse at 90% 0%, rgba(167,121,255,.15), transparent 45%),
+        rgba(25,18,37,.94);
+      color: var(--texto);
+      box-shadow: 0 30px 100px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.15);
+      -webkit-backdrop-filter: blur(32px) saturate(160%);
+      backdrop-filter: blur(32px) saturate(160%);
+    }
+    #ecp-modal::backdrop {
+      background: rgba(7,4,12,.68);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+    }
+    .modal-contenido { position: relative; padding: 28px; }
+    .modal-cerrar {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 12px;
+      background: rgba(255,255,255,.07);
+      color: white;
+      font-size: 23px;
+      -webkit-backdrop-filter: blur(15px);
+      backdrop-filter: blur(15px);
+    }
+    .modal-contenido h2 { margin-top: 10px; padding-right: 25px; }
+    .campo { margin: 16px 0; }
+    .campo label { display: block; margin-bottom: 7px; font-size: 13px; font-weight: 700; }
+    .campo input {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 14px;
+      border: 1px solid rgba(222,198,255,.18);
+      border-radius: 14px;
+      background: rgba(9,6,15,.48);
+      color: white;
+      outline: none;
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+    }
+    .campo input:focus {
+      border-color: rgba(181,138,255,.8);
+      box-shadow: 0 0 0 3px rgba(167,121,255,.12), 0 0 24px rgba(167,121,255,.09);
+    }
+    .acciones { display: grid; gap: 10px; margin-top: 20px; }
+    .separador { display: flex; align-items: center; gap: 12px; margin: 17px 0; color: var(--suave); font-size: 12px; }
+    .separador::before, .separador::after { content: ""; flex: 1; height: 1px; background: var(--borde); }
+    .enlace-modal {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 8px;
+      border: 0;
+      background: transparent;
+      color: var(--morado);
+      text-decoration: underline;
+      font-size: 13px;
+    }
+    #ecp-status { min-height: 24px; overflow-wrap: anywhere; margin: 18px 0 0; text-align: center; font-size: 13px; color: #d8c1ff; }
+    #ecp-status.error { color: var(--rojo); }
+    #ecp-status.ok { color: var(--verde); }
+    .cuenta-usuario { padding: 12px; border: 1px solid rgba(224,203,255,.16); border-radius: 18px; background: rgba(255,255,255,.035); overflow-wrap: anywhere; font-size: 13px; }
+
+    @media (max-width: 760px) {
+      .barra { gap: 10px; }
+      .acceso-superior { gap: 6px; }
+      .acceso-superior .boton { padding: 9px 10px; font-size: 12px; }
+      .navegacion { justify-content:flex-start; overflow-x:auto; padding-bottom:10px; }
+      nav { gap: 7px; flex-wrap:nowrap; justify-content:flex-start; min-width:max-content; }
+      .rejilla { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .legal { grid-template-columns: 1fr; }
+      .hero { padding: 62px 0 45px; }
+      h1 { letter-spacing: -2px; }
+      #ecp-email-superior { max-width: 150px; }
+    }
+    @media (max-width: 480px) {
+      .rejilla { grid-template-columns: 1fr; }
+      .barra { flex-wrap: wrap; }
+      .acceso-superior { margin-left: auto; }
+      #ecp-usuario-superior { flex-wrap: nowrap; justify-content: flex-end; align-items: center; }
+      .modal-contenido { padding: 22px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+      }
+    }
+    @supports not (backdrop-filter: blur(10px)) {
+      header { background: #160f22; }
+      .tarjeta { background: #191225; }
+      #ecp-modal { background: #191225; }
+    }
+
+    /* Perfil: bloques claros y adaptables a móvil */
+    #ecp-usuario-superior { padding:8px 10px; border:1px solid var(--borde); border-radius:20px; background:rgba(255,255,255,.035); max-width:100%; flex-wrap:nowrap; }
+    .perfil-seccion-titulo { margin:22px 0 9px; font-size:12px; font-weight:800; letter-spacing:.11em; color:var(--morado); text-transform:uppercase; }
+    .perfil-cabecera { display:flex; align-items:center; gap:15px; margin:20px 0; padding:18px; border:1px solid var(--borde); border-radius:22px; background:var(--cristal),rgba(30,21,43,.52); box-shadow:var(--sombra-cristal); }
+    .perfil-avatar { width:64px; height:64px; flex:0 0 64px; position:relative; overflow:hidden; display:grid; place-items:center; border:2px solid rgba(255,255,255,.35); border-radius:22px; font-size:23px; font-weight:900; color:#fff; background:linear-gradient(135deg,#c7a5ff,#7040b8); box-shadow:0 8px 25px rgba(143,87,225,.25); }
+    .perfil-identidad { min-width:0; flex:1; }
+    .perfil-identidad strong { display:block; font-size:18px; line-height:1.3; overflow-wrap:anywhere; }
+    .perfil-identidad span { display:block; margin-top:5px; color:var(--suave); font-size:12px; overflow-wrap:anywhere; }
+    .perfil-insignia { display:inline-flex; align-items:center; gap:6px; margin-top:9px; padding:4px 9px; border:1px solid rgba(117,224,176,.22); border-radius:30px; color:var(--verde); background:rgba(117,224,176,.08); font-size:11px; font-weight:700; }
+    .perfil-datos { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:12px 0 20px; }
+    .perfil-dato { min-width:0; padding:15px; border:1px solid rgba(255,255,255,.10); border-radius:17px; background:rgba(255,255,255,.035); }
+    .perfil-dato small { display:block; color:var(--suave); font-size:11px; margin-bottom:6px; }
+    .perfil-dato strong { display:block; overflow-wrap:anywhere; font-size:13px; line-height:1.45; }
+    .perfil-edicion { padding:17px; border:1px solid var(--borde); border-radius:19px; background:rgba(255,255,255,.025); }
+    .perfil-edicion h3 { margin:0 0 4px; font-size:16px; }
+    .perfil-edicion > p { margin:0; color:var(--suave); font-size:12px; }
+    .campo input { width:100%; min-height:44px; padding:11px 13px; border:1px solid var(--borde); border-radius:13px; background:rgba(12,8,19,.62); color:var(--texto); outline:none; }
+    .campo input:focus { border-color:var(--morado); box-shadow:0 0 0 3px rgba(181,138,255,.14); }
+    .nota-perfil { color:var(--suave); font-size:12px; line-height:1.5; }
+    .perfil-pie { display:flex; flex-direction:column; gap:10px; margin-top:18px; padding-top:16px; border-top:1px solid rgba(255,255,255,.09); }
+    @media(max-width:520px) {
+      .perfil-cabecera { align-items:flex-start; padding:14px; }
+      .perfil-avatar { width:54px; height:54px; flex-basis:54px; border-radius:18px; }
+      .perfil-datos { grid-template-columns:1fr; }
+      #ecp-usuario-superior { width:auto; max-width:100%; justify-content:flex-end; flex-wrap:nowrap; gap:8px; }
+      #ecp-email-superior { max-width:100%; width:auto; }
+    }
+    .ecp-top-provider { display:grid; place-items:center; width:34px; height:34px; flex:0 0 34px; border:1px solid rgba(255,255,255,.15); border-radius:50%; background:rgba(255,255,255,.07); font-size:15px; font-weight:900; }
+    .ecp-top-provider.discord { color:#aeb8ff; background:rgba(88,101,242,.18); }
+    .ecp-top-provider.email { color:#ffb8b8; background:rgba(234,67,53,.13); }
+    .ecp-top-profile { width:42px; height:42px; flex:0 0 42px; padding:0; display:block; line-height:0; position:relative; place-items:center; overflow:hidden; border:2px solid rgba(213,184,255,.8); border-radius:50%; background:linear-gradient(135deg,#c7a5ff,#7040b8); color:#fff; font-weight:900; box-shadow:0 0 0 3px rgba(167,121,255,.12); }
+    .ecp-top-profile img { display:block; position:absolute; inset:0; width:100%; height:100%; max-width:none; max-height:none; object-fit:cover; object-position:center; border-radius:50%; clip-path:circle(50% at 50% 50%); }
+    .ecp-profile-photo-row { display:flex; align-items:center; gap:14px; margin:12px 0 16px; }
+    .ecp-photo-preview { width:76px; height:76px; display:grid; place-items:center; overflow:hidden; flex:0 0 76px; border-radius:50%; border:2px solid rgba(213,184,255,.7); background:linear-gradient(135deg,#c7a5ff,#7040b8); font-size:24px; font-weight:900; }
+    .ecp-photo-preview img { display:block; width:100%; height:100%; max-width:none; max-height:none; object-fit:cover; object-position:center; border-radius:50%; clip-path:circle(50% at 50% 50%); }
+    #ecp-avatar img { display:block; width:100%; height:100%; max-width:none; max-height:none; object-fit:cover; object-position:center; border-radius:inherit; clip-path:inset(0 round 22px); }
+    .ecp-profile-photo-row, .ecp-photo-preview, .perfil-avatar, .ecp-top-profile { box-sizing:border-box; }
+    .ecp-photo-help { color:var(--suave); font-size:12px; margin:4px 0 0; }
+    .ecp-crop-controls { display:grid; gap:9px; margin-top:12px; padding:12px; border:1px solid rgba(213,184,255,.2); border-radius:14px; background:rgba(255,255,255,.035); }
+    .ecp-crop-controls[hidden] { display:none !important; }
+    .ecp-crop-field { margin:0; }
+    .ecp-crop-field input[type="range"] { display:block; width:100%; accent-color:#b98aff; margin-top:7px; }
+    .ecp-provider-label { color:var(--suave); font-size:10px; }
+
+    /* Ajustes finales solicitados: marca ECP original y perfil alineado. */
+    .logo, .ecp-top-brand-name {
+      font-style: italic !important;
+      font-weight: 900;
+      color: transparent;
+      background: linear-gradient(110deg, #ffffff 0%, #d8c5ff 42%, #a879ff 72%, #7b4dff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    .logo span { color: #a879ff; -webkit-text-fill-color: #a879ff; }
+    #ecp-usuario-superior:not([hidden]) {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+      gap: 12px;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .ecp-top-actions { display:flex; align-items:center; justify-content:flex-end; gap:8px; margin-left:auto; flex:0 0 auto; }
+    #ecp-abrir-perfil-superior { flex: 0 0 42px; }
+    #ecp-cerrar-superior { flex: 0 0 auto; white-space: nowrap; }
+    @media (max-width: 480px) {
+      #ecp-usuario-superior:not([hidden]) { flex-wrap: nowrap; gap: 7px; }
+      .ecp-top-brand { padding-right: 4px; }
+      .ecp-top-brand-name { font-size: 22px; }
+      .ecp-login-brand .ecp-top-brand-name { font-size:22px; }
+      .ecp-top-actions { gap:7px; }
+      #ecp-cerrar-superior { min-height: 38px; padding: 8px 10px; }
+    }
+    @media(max-width:520px) {
+      .ecp-top-card { gap:8px; padding:8px 9px; border-radius:20px; width:auto; max-width:100%; flex-wrap:nowrap; }
+      .ecp-top-brand { padding-right:4px; }
+      .ecp-top-brand-name { font-size:22px; }
+      .ecp-top-device strong { font-size:11px; }
+      .ecp-top-device small { font-size:9px; }
+      .ecp-top-provider { width:30px; height:30px; flex-basis:30px; }
+      .ecp-top-profile { width:38px; height:38px; flex-basis:38px; }
+    }
+
+  </style>
 
 <style>
-:root {
-  --bg: #100d19;
-  --panel: #191425;
-  --panel2: #211a30;
-  --border: #382c4b;
-  --purple: #a855f7;
-  --green: #38e58b;
-  --text: #f8f5ff;
-  --muted: #aaa0bb;
-}
-
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  padding: 25px 14px 45px;
-  color: var(--text);
-  background: radial-gradient(ellipse at top, #2b1741 0%, var(--bg) 48%);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-.container {
-  max-width: 760px;
-  margin: auto;
-}
-
-header {
-  text-align: center;
-  margin-bottom: 28px;
-}
-
-.logo {
-  width: 54px;
-  height: 54px;
-  display: grid;
-  place-items: center;
-  margin: 0 auto 14px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #b44cff, #6d28d9);
-  font-size: 26px;
-  font-weight: 900;
-}
-
-h1 {
-  margin: 0;
-  font-size: clamp(26px, 6vw, 35px);
-  letter-spacing: -1px;
-}
-
-.subtitle {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.7;
-  margin: 10px auto 0;
-  max-width: 520px;
-}
-
-.progress {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 22px 0;
-}
-
-.progress span {
-  padding: 7px 10px;
-  border-radius: 8px;
-  background: #ffffff08;
-  border: 1px solid var(--border);
-  color: #c8bdd7;
-  font-size: 11px;
-}
-
-.section {
-  padding: 21px;
-  margin-bottom: 16px;
-  border: 1px solid var(--border);
-  border-radius: 17px;
-  background: #191425ed;
-}
-
-.section-heading {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 17px;
-}
-
-.step {
-  width: 35px;
-  height: 35px;
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  border: 1px solid #a855f750;
-  border-radius: 11px;
-  background: #a855f718;
-  color: #d8b4fe;
-  font-weight: 800;
-}
-
-h2 {
-  margin: 0;
-  font-size: 17px;
-}
-
-.section-description {
-  margin: 5px 0 0;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.5;
-}
-
-.options {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-}
-
-.option {
-  width: 100%;
-  min-height: 67px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 13px;
-  color: var(--text);
-  text-align: left;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 13px;
-  cursor: pointer;
-  transition: background .15s, border-color .15s;
-}
-
-.option:hover {
-  background: var(--panel2);
-  border-color: #75538f;
-}
-
-.option.selected {
-  background: #38e58b08;
-  border-color: var(--green);
-  box-shadow: inset 0 0 0 1px #38e58b20;
-}
-
-.radio {
-  width: 23px;
-  height: 23px;
-  flex: 0 0 23px;
-  border: 2px solid #766a87;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-}
-
-.option.selected .radio {
-  border-color: var(--green);
-}
-
-.option.selected .radio::after {
-  content: "";
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: var(--green);
-}
-
-.option-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.option-name {
-  font-size: 13px;
-  line-height: 1.5;
-  font-weight: 750;
-}
-
-.option-detail {
-  margin-top: 3px;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.55;
-}
-
-.option-price {
-  flex-shrink: 0;
-  text-align: right;
-  color: var(--green);
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.small-note {
-  margin: 12px 2px 0;
-  color: #a99bb9;
-  font-size: 10px;
-  line-height: 1.7;
-}
-
-.device-field {
-  margin-top: 19px;
-}
-
-.field-label {
-  display: block;
-  margin-bottom: 9px;
-  font-size: 12px;
-  font-weight: 750;
-}
-
-.text-input {
-  width: 100%;
-  padding: 13px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: #100d19;
-  color: var(--text);
-  font-size: 13px;
-  outline: none;
-}
-
-.text-input:focus {
-  border-color: var(--purple);
-}
-
-.secondary-button {
-  margin-top: 10px;
-  padding: 10px 13px;
-  border: 1px solid #765098;
-  border-radius: 9px;
-  background: #a855f713;
-  color: #e1c5ff;
-  font-size: 11px;
-  font-weight: 750;
-  cursor: pointer;
-}
-
-.text-link {
-  display: inline-block;
-  margin-top: 10px;
-  color: #cba4ff;
-  font-size: 11px;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.summary {
-  padding: 22px 20px;
-  margin-top: 21px;
-  border: 1px solid #704493;
-  border-radius: 18px;
-  background: linear-gradient(145deg, #28183d, #191425);
-}
-
-.summary h2 {
-  margin-bottom: 17px;
-  font-size: 19px;
-}
-
-.summary-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 15px;
-  padding: 11px 0;
-  border-bottom: 1px solid #ffffff10;
-  font-size: 12px;
-}
-
-.summary-row span:first-child {
-  color: var(--muted);
-}
-
-.summary-row span:last-child {
-  max-width: 65%;
-  text-align: right;
-  overflow-wrap: anywhere;
-}
-
-.total-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding-top: 20px;
-}
-
-.total-row strong {
-  font-size: 15px;
-}
-
-.total-price {
-  color: var(--green);
-  font-size: 28px;
-  font-weight: 900;
-}
-
-.primary-button {
-  width: 100%;
-  min-height: 52px;
-  margin-top: 20px;
-  border: 0;
-  border-radius: 12px;
-  background: linear-gradient(100deg, #a855f7, #7c3aed);
-  color: white;
-  font-size: 14px;
-  font-weight: 850;
-  cursor: pointer;
-}
-
-.primary-button:hover { filter: brightness(1.08); }
-
-.notice {
-  display: none;
-  margin-top: 14px;
-  padding: 13px;
-  border-radius: 10px;
-  border: 1px solid #a855f755;
-  background: #a855f710;
-  color: #e8d5ff;
-  font-size: 12px;
-  line-height: 1.7;
-}
-
-.notice.show { display: block; }
-
-.disclaimer {
-  margin: 13px 0 0;
-  text-align: center;
-  color: #9c90aa;
-  font-size: 10px;
-  line-height: 1.7;
-}
-
-footer {
-  margin-top: 22px;
-  text-align: center;
-  color: #7e738b;
-  font-size: 10px;
-}
-
-@media (min-width: 560px) {
-  .options.two-columns {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 390px) {
-  .section { padding: 16px 13px; }
-  .option { gap: 9px; padding: 11px 9px; }
-  .option-price { font-size: 11px; }
-}
+.comprar-destacado{display:block;width:100%;min-height:50px;margin-top:16px;padding:12px 20px;border:1px solid rgba(221,190,255,.85);border-radius:14px;background:linear-gradient(110deg,#b58aff 0%,#8b5cf6 55%,#6d28d9 100%);color:#fff;font-size:17px;font-weight:850;letter-spacing:.2px;box-shadow:0 8px 24px rgba(139,92,246,.28);transition:transform .18s,filter .18s,box-shadow .18s}
+.comprar-destacado:hover{transform:translateY(-2px);filter:brightness(1.08);box-shadow:0 12px 30px rgba(139,92,246,.4)}
+.comprar-herramientas-wrap{max-width:360px;margin:24px auto 0}
+#ecp-order-section .container{max-width:760px}
 </style>
 </head>
 
 <body>
+  <header>
+    <div class="contenedor barra">
+      <div id="ecp-usuario-superior" class="ecp-top-card" hidden aria-label="Marca ECP y perfil de usuario">
+        <a class="ecp-top-brand" href="#inicio" aria-label="ECP inicio"><span class="ecp-top-brand-name">ECP</span></a>
+        <div class="ecp-top-actions">
+          <button id="ecp-abrir-perfil-superior" class="ecp-top-profile" type="button" aria-label="Abrir perfil" title="Mi perfil"><span id="ecp-avatar-superior">E</span></button>
+          <button id="ecp-cerrar-superior" class="boton" type="button" aria-label="Cerrar sesión">Salir</button>
+        </div>
+      </div>
+      <div class="acceso-superior">
+        <a class="ecp-login-brand" href="#inicio" aria-label="ECP inicio"><span class="ecp-top-brand-name">ECP</span></a>
+        <button id="ecp-abrir-login" class="boton" type="button">Iniciar sesión</button>
+      </div>
+    </div>
+    <div class="contenedor navegacion">
+      <nav aria-label="Navegación principal">
+        <a href="#catalogo">🛍️ Catálogo</a>
+        <a href="#herramientas">🧰 Herramientas</a>
+        <a href="#ayuda">💬 Ayuda</a>
+        <a href="#legal">ⓘ Información legal</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="contenedor">
+        <div class="etiqueta">TU MUNDO IPHONE, EN UN SOLO LUGAR</div>
+        <h1>Más posibilidades.<br><span>A tu manera.</span></h1>
+        <p class="descripcion">Explora certificados y herramientas para iPhone con información clara sobre compatibilidad, vigencia y condiciones de cada producto.</p>
+        <a class="boton primario" href="#catalogo">Explorar catálogo ↓</a>
+        <div class="aviso">
+          <strong>Bienvenido a ECP</strong><br>
+          Estamos preparando nuestros servicios. Las compras, los pagos y las entregas todavía no están habilitados en esta versión de la página.
+        </div>
+      </div>
+    </section>
+
+    <section id="catalogo">
+      <div class="contenedor">
+        <div class="encabezado-seccion">
+          <div class="etiqueta">NUESTRO CATÁLOGO</div>
+          <h2>Certificados y servicios</h2>
+          <p>Consulta cada producto y verifica sus condiciones antes de comprar.</p>
+        </div>
+        <div class="rejilla">
+          <article class="tarjeta">
+            <div class="categoria">BÁSICO</div><h3>Certificado básico</h3>
+            <p>Para firma de aplicaciones en dispositivos compatibles, según las condiciones del proveedor.</p>
+            <div class="precio">Desde US$2/año</div>
+            <p>Vigencia, compatibilidad y protección contra revocación: por confirmar con el proveedor.</p>
+          <button type="button" class="boton comprar-destacado" data-ecp-buy="basic">Comprar</button></article>
+          <article class="tarjeta">
+            <div class="categoria">JIT</div><h3>Certificado JIT</h3>
+            <p>Opción destinada a determinados flujos de ejecución de código y herramientas compatibles.</p>
+            <div class="precio">Desde US$7/año</div>
+            <p>Las funciones JIT dependen del certificado, la herramienta y la versión de iOS.</p>
+          <button type="button" class="boton comprar-destacado" data-ecp-buy="jit">Comprar</button></article>
+          <article class="tarjeta">
+            <div class="categoria">PPQLESS</div><h3>Certificado PPQLESS</h3>
+            <p>Producto comercializado bajo esta denominación, sujeto a las especificaciones del proveedor.</p>
+            <div class="precio">Desde US$7/año</div>
+            <p>Las funciones y limitaciones deben confirmarse antes de la compra.</p>
+          <button type="button" class="boton comprar-destacado" data-ecp-buy="ppqless">Comprar</button></article>
+          <article class="tarjeta">
+            <div class="categoria">JIT + PPQLESS</div><h3>Certificado JIT PPQLESS</h3>
+            <p>Producto que combina ambas denominaciones, conforme a las características confirmadas por el proveedor.</p>
+            <div class="precio">Desde US$11/año</div>
+            <p>No se garantiza compatibilidad universal ni ausencia de revocaciones.</p>
+          <button type="button" class="boton comprar-destacado" data-ecp-buy="jit-ppqless">Comprar</button></article>
+          <article class="tarjeta">
+            <div class="categoria">DESARROLLO</div><h3>Cuenta de desarrollador de Apple</h3>
+            <p>Consulta información sobre servicios relacionados con el programa de desarrollo de Apple.</p>
+            <div class="precio">US$200</div>
+            <p>Alcance del servicio, elegibilidad y condiciones: por confirmar antes de ofrecerlo.</p>
+          <button type="button" class="boton comprar-destacado" data-ecp-buy="developer">Comprar</button></article>
+        </div>
+        <p class="nota">Precios de referencia configurados por ECP; no representan una confirmación de disponibilidad. Los precios finales, impuestos, vigencia y condiciones se mostrarán antes de habilitar las compras.</p>
+      </div>
+    </section>
+
+    <section id="herramientas">
+      <div class="contenedor">
+        <div class="encabezado-seccion">
+          <div class="etiqueta">CENTRO DE UTILIDADES</div>
+          <h2>Herramientas</h2>
+          <p>Estamos preparando estas utilidades. Una herramienta no se considerará disponible hasta que su funcionamiento se haya implementado y probado.</p>
+        </div>
+        <div class="rejilla">
+          <article class="tarjeta"><div class="icono">📱</div><h3>Obtener detalles del dispositivo</h3><p>Consulta la información necesaria para un servicio compatible, con consentimiento previo.</p><span class="estado">En preparación</span></article>
+          <article class="tarjeta"><div class="icono">✍️</div><h3>Firmante de IPA</h3><p>Firma de aplicaciones con archivos y perfiles compatibles.</p><span class="estado">En preparación</span></article>
+          <article class="tarjeta"><div class="icono">📲</div><h3>Instalador de aplicaciones</h3><p>Información sobre herramientas de instalación compatibles.</p><span class="estado">En preparación</span></article>
+          <article class="tarjeta"><div class="icono">🛡️</div><h3>Comprobador de certificados</h3><p>Consulta de los datos verificables de un certificado.</p><span class="estado">En preparación</span></article>
+          <article class="tarjeta"><div class="icono">🔑</div><h3>Cambiar contraseña del certificado</h3><p>Procesamiento seguro de archivos P12 compatibles.</p><span class="estado">En preparación</span></article>
+          <article class="tarjeta"><div class="icono">🔄</div><h3>Convertidor de ESign</h3><p>Conversión entre formatos compatibles, por definir.</p><span class="estado">En preparación</span></article>
+          <article class="tarjeta"><div class="icono">🔓</div><h3>Comprobador de jailbreak</h3><p>Consulta informativa de compatibilidad por dispositivo e iOS.</p><span class="estado">En preparación</span></article>
+          <article class="tarjeta"><div class="icono">⬇️</div><h3>Comprobador de firmware</h3><p>Consulta de versiones y estado de firma mediante fuentes verificables.</p><span class="estado">En preparación</span></article>
+          <article class="tarjeta"><div class="icono">🗂️</div><h3>Creador de repositorios</h3><p>Preparación de archivos JSON para organizar aplicaciones.</p><span class="estado">En preparación</span></article>
+          <article class="tarjeta"><div class="icono">📄</div><h3>Creador de manifiestos</h3><p>Generación de manifiestos plist con campos validados.</p><span class="estado">En preparación</span></article>
+          <article class="tarjeta"><div class="icono">🧭</div><h3>Navegador de repositorios</h3><p>Exploración de fuentes revisadas y aplicaciones compatibles.</p><span class="estado">En preparación</span></article>
+        </div>
+        <div class="comprar-herramientas-wrap"><button type="button" class="boton comprar-destacado comprar-herramientas" data-ecp-buy="basic">Comprar</button></div>
+      </div>
+    </section>
+
+    
+<section id="ecp-order-section" aria-label="Configurar pedido">
+  <div class="order-close-row"><button type="button" id="ecp-order-close" class="order-close">✕ Cerrar pedido</button></div>
 <main class="container">
   <header>
     <div class="logo">E</div>
@@ -540,8 +749,484 @@ footer {
   <footer>ECP · Configuración de pedido</footer>
 </main>
 
+
+  </main>
+</section>
+<style>
+
+
+#ecp-order-section {
+  --bg: #100d19;
+  --panel: #191425;
+  --panel2: #211a30;
+  --border: #382c4b;
+  --purple: #a855f7;
+  --green: #38e58b;
+  --text: #f8f5ff;
+  --muted: #aaa0bb;
+}
+
+
+
+#ecp-order-section, #ecp-order-section * { box-sizing: border-box; }
+
+
+
+#ecp-order-section {
+  margin: 0;
+  padding: 25px 14px 45px;
+  color: var(--text);
+  background: radial-gradient(ellipse at top, #2b1741 0%, var(--bg) 48%);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+
+
+#ecp-order-section .container {
+  max-width: 760px;
+  margin: auto;
+}
+
+
+
+#ecp-order-section header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+
+
+#ecp-order-section .logo {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 14px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #b44cff, #6d28d9);
+  font-size: 26px;
+  font-weight: 900;
+}
+
+
+
+#ecp-order-section h1 {
+  margin: 0;
+  font-size: clamp(26px, 6vw, 35px);
+  letter-spacing: -1px;
+}
+
+
+
+#ecp-order-section .subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 10px auto 0;
+  max-width: 520px;
+}
+
+
+
+#ecp-order-section .progress {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 22px 0;
+}
+
+
+
+#ecp-order-section .progress span {
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: #ffffff08;
+  border: 1px solid var(--border);
+  color: #c8bdd7;
+  font-size: 11px;
+}
+
+
+
+#ecp-order-section .section {
+  padding: 21px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  background: #191425ed;
+}
+
+
+
+#ecp-order-section .section-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 17px;
+}
+
+
+
+#ecp-order-section .step {
+  width: 35px;
+  height: 35px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid #a855f750;
+  border-radius: 11px;
+  background: #a855f718;
+  color: #d8b4fe;
+  font-weight: 800;
+}
+
+
+
+#ecp-order-section h2 {
+  margin: 0;
+  font-size: 17px;
+}
+
+
+
+#ecp-order-section .section-description {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+
+
+#ecp-order-section .options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+
+
+#ecp-order-section .option {
+  width: 100%;
+  min-height: 67px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px;
+  color: var(--text);
+  text-align: left;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+
+
+
+#ecp-order-section .option:hover {
+  background: var(--panel2);
+  border-color: #75538f;
+}
+
+
+
+#ecp-order-section .option.selected {
+  background: #38e58b08;
+  border-color: var(--green);
+  box-shadow: inset 0 0 0 1px #38e58b20;
+}
+
+
+
+#ecp-order-section .radio {
+  width: 23px;
+  height: 23px;
+  flex: 0 0 23px;
+  border: 2px solid #766a87;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+
+
+#ecp-order-section .option.selected .radio {
+  border-color: var(--green);
+}
+
+
+
+#ecp-order-section .option.selected .radio::after {
+  content: "";
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+
+
+#ecp-order-section .option-info {
+  flex: 1;
+  min-width: 0;
+}
+
+
+
+#ecp-order-section .option-name {
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 750;
+}
+
+
+
+#ecp-order-section .option-detail {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+
+
+#ecp-order-section .option-price {
+  flex-shrink: 0;
+  text-align: right;
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+
+
+#ecp-order-section .small-note {
+  margin: 12px 2px 0;
+  color: #a99bb9;
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+
+
+#ecp-order-section .device-field {
+  margin-top: 19px;
+}
+
+
+
+#ecp-order-section .field-label {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+
+
+#ecp-order-section .text-input {
+  width: 100%;
+  padding: 13px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #100d19;
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+}
+
+
+
+#ecp-order-section .text-input:focus {
+  border-color: var(--purple);
+}
+
+
+
+#ecp-order-section .secondary-button {
+  margin-top: 10px;
+  padding: 10px 13px;
+  border: 1px solid #765098;
+  border-radius: 9px;
+  background: #a855f713;
+  color: #e1c5ff;
+  font-size: 11px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+
+
+#ecp-order-section .text-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: #cba4ff;
+  font-size: 11px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+
+
+#ecp-order-section .summary {
+  padding: 22px 20px;
+  margin-top: 21px;
+  border: 1px solid #704493;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #28183d, #191425);
+}
+
+
+
+#ecp-order-section .summary h2 {
+  margin-bottom: 17px;
+  font-size: 19px;
+}
+
+
+
+#ecp-order-section .summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 11px 0;
+  border-bottom: 1px solid #ffffff10;
+  font-size: 12px;
+}
+
+
+
+#ecp-order-section .summary-row span:first-child {
+  color: var(--muted);
+}
+
+
+
+#ecp-order-section .summary-row span:last-child {
+  max-width: 65%;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+
+
+#ecp-order-section .total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-top: 20px;
+}
+
+
+
+#ecp-order-section .total-row strong {
+  font-size: 15px;
+}
+
+
+
+#ecp-order-section .total-price {
+  color: var(--green);
+  font-size: 28px;
+  font-weight: 900;
+}
+
+
+
+#ecp-order-section .primary-button {
+  width: 100%;
+  min-height: 52px;
+  margin-top: 20px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(100deg, #a855f7, #7c3aed);
+  color: white;
+  font-size: 14px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+
+
+#ecp-order-section .primary-button:hover { filter: brightness(1.08); }
+
+
+
+#ecp-order-section .notice {
+  display: none;
+  margin-top: 14px;
+  padding: 13px;
+  border-radius: 10px;
+  border: 1px solid #a855f755;
+  background: #a855f710;
+  color: #e8d5ff;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+
+
+#ecp-order-section .notice.show { display: block; }
+
+
+
+#ecp-order-section .disclaimer {
+  margin: 13px 0 0;
+  text-align: center;
+  color: #9c90aa;
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+
+
+#ecp-order-section footer {
+  margin-top: 22px;
+  text-align: center;
+  color: #7e738b;
+  font-size: 10px;
+}
+
+
+
+@media (min-width: 560px) {
+  
+#ecp-order-section .options.two-columns {
+    grid-template-columns: 1fr 1fr;
+  }
+
+}
+
+
+
+@media (max-width: 390px) {
+  
+#ecp-order-section .section { padding: 16px 13px; }
+
+  
+#ecp-order-section .option { gap: 9px; padding: 11px 9px; }
+
+  
+#ecp-order-section .option-price { font-size: 11px; }
+
+}
+
+
+#ecp-order-section { display:none; margin: 30px auto; padding: 24px 0 40px; color:#f8f5ff; background:radial-gradient(ellipse at top, #2b1741 0%, #100d19 48%); border-radius:22px; }
+#ecp-order-section.is-visible { display:block; }
+#ecp-order-section .container { width:min(760px, 92%); }
+#ecp-order-section .order-close-row { display:flex; justify-content:flex-end; margin:0 auto 12px; width:min(760px,92%); }
+#ecp-order-section .order-close { border:1px solid #a855f7; background:#211a30; color:#f8f5ff; border-radius:10px; padding:9px 14px; cursor:pointer; }
+
+</style>
 <script>
+(() => {
 "use strict";
+
 
 const products = [
   {
@@ -641,6 +1326,7 @@ function makeOption(item, selected, priceText, onClick) {
   const button = document.createElement("button");
   button.type = "button";
   button.className = "option" + (selected ? " selected" : "");
+  if (item && item.id) button.dataset.productId = item.id;
   button.setAttribute("aria-pressed", selected ? "true" : "false");
 
   const radio = document.createElement("span");
@@ -865,6 +1551,528 @@ $("checkout").addEventListener("click", () => {
 });
 
 renderAll();
+
+})();
 </script>
+
+<section id="ayuda">
+      <div class="contenedor">
+        <div class="encabezado-seccion">
+          <div class="etiqueta">CENTRO DE AYUDA</div><h2>Preguntas frecuentes</h2>
+        </div>
+        <details class="pregunta"><summary>¿Qué sucede si revocan mi certificado?</summary><p>Depende de las condiciones del proveedor. Antes de ofrecer un producto publicaremos las políticas aplicables y sus limitaciones.</p></details>
+        <details class="pregunta"><summary>¿Cuánto tarda la entrega?</summary><p>Los plazos todavía no están definidos. Se informarán antes de habilitar cualquier compra.</p></details>
+        <details class="pregunta"><summary>¿Cuánto dura un certificado?</summary><p>La vigencia depende del producto y del proveedor. Debe verificarse para cada oferta.</p></details>
+        <details class="pregunta"><summary>¿Todos los certificados funcionan con todas las versiones de iOS?</summary><p>No. La compatibilidad depende del certificado, la herramienta, el dispositivo y la versión del sistema.</p></details>
+        <details class="pregunta"><summary>¿Necesito hacer jailbreak?</summary><p>No necesariamente. Depende de la herramienta y de la función que quieras utilizar.</p></details>
+        <details class="pregunta"><summary>¿Cuántos dispositivos puedo registrar?</summary><p>El límite depende de las condiciones del proveedor y debe confirmarse para cada producto.</p></details>
+        <details class="pregunta"><summary>¿Cómo contacto con ECP?</summary><p>Los canales oficiales de atención se publicarán cuando estén habilitados.</p></details>
+      </div>
+    </section>
+
+    <section id="legal">
+      <div class="contenedor">
+        <div class="encabezado-seccion">
+          <div class="etiqueta">TRANSPARENCIA</div><h2>Información legal</h2>
+        </div>
+        <div class="legal">
+          <article><h3>Condiciones del servicio</h3><p>Las condiciones definitivas se publicarán antes de aceptar compras.</p></article>
+          <article><h3>Política de privacidad</h3><p>Explicaremos qué datos se recopilan, para qué se utilizan y cómo ejercer tus derechos.</p></article>
+          <article><h3>Entregas y reembolsos</h3><p>Los plazos, garantías y procedimientos se informarán antes de habilitar los pagos.</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="contenedor">
+      <a class="logo" href="#">ECP<span>.</span></a>
+      <p>ECP es un proyecto independiente y no está afiliado a Apple Inc.</p>
+      <p class="pequeno">© ECP · Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <dialog id="ecp-modal" aria-labelledby="ecp-titulo-modal">
+    <div class="modal-contenido">
+      <button id="ecp-cerrar-modal" class="modal-cerrar" type="button" aria-label="Cerrar ventana">×</button>
+      
+      <h2 id="ecp-titulo-modal">Iniciar sesión</h2>
+      <p id="ecp-descripcion-modal" class="suave">Accede a tu cuenta ECP.</p>
+
+      <div id="ecp-formulario">
+        <div class="ecp-oauth-opciones" aria-label="Opciones de inicio de sesión">
+          <button id="ecp-discord" class="boton discord ancho" type="button"><span class="ecp-oauth-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.73 5.12A18.6 18.6 0 0 0 15.15 3.7l-.57 1.16a17.1 17.1 0 0 0-5.16 0L8.85 3.7a18.5 18.5 0 0 0-4.58 1.42C1.37 9.4.59 13.58.98 17.7a18.7 18.7 0 0 0 5.62 2.84l1.21-1.97a12 12 0 0 1-1.9-.92l.47-.37c3.66 1.7 7.62 1.7 11.24 0l.48.37a12 12 0 0 1-1.9.92l1.2 1.97a18.6 18.6 0 0 0 5.63-2.84c.47-4.78-.8-8.92-3.3-12.58ZM8.75 14.9c-1.1 0-2-.99-2-2.2s.88-2.2 2-2.2 2.02.99 2 2.2c0 1.21-.88 2.2-2 2.2Zm6.5 0c-1.1 0-2-.99-2-2.2s.88-2.2 2-2.2 2.02.99 2 2.2c0 1.21-.88 2.2-2 2.2Z"/></svg></span><span class="ecp-oauth-label">Continuar con Discord</span><span class="ecp-oauth-arrow" aria-hidden="true">→</span></button>
+          <button id="ecp-google" class="boton google ancho" type="button"><span class="ecp-oauth-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><path fill="#4285F4" d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11a9.4 9.4 0 0 1-4.1 6.2v5.1h6.6c3.9-3.6 6.1-8.8 6.1-15Z"/><path fill="#34A853" d="M24 44c5.5 0 10.1-1.8 13.5-4.9l-6.6-5.1c-1.8 1.2-4.1 2-6.9 2-5.3 0-9.8-3.6-11.4-8.4H5.8v5.3A20 20 0 0 0 24 44Z"/><path fill="#FBBC05" d="M12.6 27.6a12 12 0 0 1 0-7.2v-5.3H5.8a20 20 0 0 0 0 17.8l6.8-5.3Z"/><path fill="#EA4335" d="M24 12c3 0 5.7 1 7.8 3.1l5.8-5.8C34.1 6 29.5 4 24 4A20 20 0 0 0 5.8 15.1l6.8 5.3C14.2 15.6 18.7 12 24 12Z"/></svg></span><span class="ecp-oauth-label">Continuar con Google</span><span class="ecp-oauth-arrow" aria-hidden="true">→</span></button>
+          <button id="ecp-github" class="boton github ancho" type="button"><span class="ecp-oauth-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.54v-2.1c-3.1.67-3.76-1.32-3.76-1.32-.5-1.29-1.23-1.63-1.23-1.63-1.01-.69.08-.68.08-.68 1.12.08 1.71 1.15 1.71 1.15.99 1.7 2.59 1.21 3.22.92.1-.72.39-1.21.7-1.49-2.48-.28-5.09-1.24-5.09-5.52 0-1.22.44-2.22 1.15-3-.12-.28-.5-1.42.11-2.96 0 0 .94-.3 3.05 1.14a10.6 10.6 0 0 1 5.55 0c2.12-1.44 3.05-1.14 3.05-1.14.61 1.54.23 2.68.12 2.96.71.78 1.14 1.78 1.14 3 0 4.29-2.61 5.24-5.1 5.52.4.35.75 1.03.75 2.08v3.07c0 .3.2.65.76.54A11.1 11.1 0 0 0 12 .9Z"/></svg></span><span class="ecp-oauth-label">Continuar con GitHub</span><span class="ecp-oauth-arrow" aria-hidden="true">→</span></button>
+        </div>
+        
+      </div>
+
+      <div id="ecp-perfil" hidden>
+        <div class="perfil-cabecera">
+          <div id="ecp-avatar" class="perfil-avatar" aria-hidden="true">E</div>
+          <div class="perfil-identidad">
+            <strong id="ecp-nombre-mostrado">Mi cuenta ECP</strong>
+            <span id="ecp-user-email"></span>
+            <span class="perfil-insignia">● Cuenta conectada</span>
+          </div>
+        </div>
+
+        <div class="perfil-seccion-titulo">Resumen de la cuenta</div>
+        <div class="perfil-datos">
+          <div class="perfil-dato"><small>🔑 Método de acceso</small><strong id="ecp-metodo-acceso">Cuenta ECP</strong></div>
+          <div class="perfil-dato"><small>📅 Cuenta creada</small><strong id="ecp-fecha-cuenta">—</strong></div>
+          <div class="perfil-dato"><small>🛡️ Estado de sesión</small><strong>Activa y conectada</strong></div>
+          <div class="perfil-dato"><small>🌐 Plataforma</small><strong>ECP · Tu mundo iPhone</strong></div>
+        </div>
+
+        <div class="perfil-seccion-titulo">Personalización</div>
+        <form id="ecp-perfil-form" class="perfil-edicion">
+          <h3>Editar tu perfil</h3>
+          <p>Personaliza el nombre que aparece en tu cuenta.</p>
+          <div class="ecp-profile-photo-row">
+            <div id="ecp-avatar-preview" class="ecp-photo-preview" aria-label="Vista previa de la foto">E</div>
+            <div style="min-width:0;flex:1">
+              <label for="ecp-foto-perfil">Foto de perfil</label>
+              <input id="ecp-foto-perfil" type="file" accept="image/*" aria-describedby="ecp-foto-ayuda">
+              <p id="ecp-foto-ayuda" class="ecp-photo-help">Elige una imagen y ajusta el encuadre antes de guardar.</p>
+              <div id="ecp-controles-recorte" class="ecp-crop-controls" hidden>
+                <div class="campo ecp-crop-field"><label for="ecp-recorte-zoom">Acercar o alejar</label><input id="ecp-recorte-zoom" type="range" min="1" max="3" step="0.05" value="1"></div>
+                <div class="campo ecp-crop-field"><label for="ecp-recorte-x">Mover izquierda / derecha</label><input id="ecp-recorte-x" type="range" min="0" max="100" step="1" value="50"></div>
+                <div class="campo ecp-crop-field"><label for="ecp-recorte-y">Mover arriba / abajo</label><input id="ecp-recorte-y" type="range" min="0" max="100" step="1" value="50"></div>
+                <p class="ecp-photo-help">La vista previa circular muestra exactamente el recorte que se guardará.</p>
+              </div>
+              <button id="ecp-quitar-foto" class="boton" type="button" style="margin-top:8px">Quitar foto</button>
+            </div>
+          </div>
+          <div class="campo">
+            <label for="ecp-nombre">Nombre para mostrar</label>
+            <input id="ecp-nombre" name="nombre" type="text" maxlength="50" autocomplete="name" placeholder="Escribe tu nombre" />
+          </div>
+<div class="acciones" style="margin-top:12px">
+            <button id="ecp-guardar-perfil" class="boton primario ancho" type="submit">Guardar cambios</button>
+          </div>
+        </form>
+        <p class="nota-perfil">ℹ️ Tu nombre y foto se guardan en los datos de tu cuenta de Supabase. No introduzcas contraseñas ni información privada aquí.</p>
+        <div class="perfil-pie">
+          <button id="ecp-logout" class="boton ancho" type="button">Cerrar sesión</button>
+        </div>
+      </div>
+
+      <p id="ecp-status" role="status" aria-live="polite">Preparando el acceso seguro...</p>
+      
+    </div>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  (() => {
+    "use strict";
+
+    const SUPABASE_URL = "https://hkgixlxejgqvhaprmstp.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_qAhLGFiSOsdt0EAfwdjDeg_90O-uNYS";
+
+    const $ = (id) => document.getElementById(id);
+    const modal = $("ecp-modal");
+    const status = $("ecp-status");
+    const discordButton = $("ecp-discord");
+    const googleButton = $("ecp-google");
+    const githubButton = $("ecp-github");
+    const logoutButton = $("ecp-logout");
+    const formulario = $("ecp-formulario");
+    const perfil = $("ecp-perfil");
+    const userEmail = $("ecp-user-email");
+    const profileForm = $("ecp-perfil-form");
+    const profileNameInput = $("ecp-nombre");
+    const profileNameShown = $("ecp-nombre-mostrado");
+    const profileAvatar = $("ecp-avatar");
+    const profileProvider = $("ecp-metodo-acceso");
+    const profileCreated = $("ecp-fecha-cuenta");
+    const saveProfileButton = $("ecp-guardar-perfil");
+    const abrirLogin = $("ecp-abrir-login");
+    const cerrarModal = $("ecp-cerrar-modal");
+    const tituloModal = $("ecp-titulo-modal");
+    const descripcionModal = $("ecp-descripcion-modal");
+    const usuarioSuperior = $("ecp-usuario-superior");
+    const cerrarSuperior = $("ecp-cerrar-superior");
+    const abrirPerfilSuperior = $("ecp-abrir-perfil-superior");
+    const topAvatar = $("ecp-avatar-superior");
+    const avatarPreview = $("ecp-avatar-preview");
+    const photoInput = $("ecp-foto-perfil");
+    const removePhotoButton = $("ecp-quitar-foto");
+    const cropControls = $("ecp-controles-recorte");
+    const cropZoom = $("ecp-recorte-zoom");
+    const cropX = $("ecp-recorte-x");
+    const cropY = $("ecp-recorte-y");
+
+    let pendingAvatarData = null;
+    let sourcePhotoImage = null;
+    let client;
+
+    let ecpCurrentSession = null;
+    function abrirCompra(productId) {
+      if (!ecpCurrentSession?.user) {
+        abrirVentana(false);
+        mensaje("Inicia sesión para continuar con tu pedido.");
+        return;
+      }
+      const order = document.getElementById("ecp-order-section");
+      if (!order) return;
+      order.classList.add("is-visible");
+      order.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (productId) {
+        const productOption = document.querySelector(`#ecp-order-section #products .option[data-product-id="${productId}"]`);
+        if (productOption) productOption.click();
+      }
+    }
+    document.querySelectorAll("[data-ecp-buy]").forEach(button => {
+      button.addEventListener("click", () => abrirCompra(button.dataset.ecpBuy));
+    });
+    document.getElementById("ecp-order-close")?.addEventListener("click", () => {
+      const order = document.getElementById("ecp-order-section");
+      order?.classList.remove("is-visible");
+      document.getElementById("catalogo")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+
+    function mensaje(texto, tipo = "") {
+      status.textContent = texto;
+      status.className = tipo;
+    }
+
+    function bloquear(bloqueado) {
+      discordButton.disabled = bloqueado;
+      googleButton.disabled = bloqueado;
+      githubButton.disabled = bloqueado;
+    }
+
+    function abrirVentana(registro = false) {
+      // ECP permite iniciar sesión únicamente con Discord, Google o GitHub.
+      tituloModal.textContent = "Iniciar sesión";
+      descripcionModal.textContent = "Accede a tu cuenta ECP.";
+      if (!modal.open) modal.showModal();
+      if (perfil.hidden) {
+        mensaje("Elige Discord, Google o GitHub para iniciar sesión.");
+      }
+    }
+
+    function initials(name) {
+      return (name || "E").replace(/[^\p{L}\p{N} ]/gu, "").trim().split(/\s+/).slice(0,2).map(p => p.charAt(0)).join("").toUpperCase() || "E";
+    }
+
+    function paintAvatar(container, imageData, fallbackText) {
+      container.replaceChildren();
+      if (imageData) {
+        const img = document.createElement("img");
+        img.src = imageData;
+        img.alt = "Foto de perfil";
+        container.appendChild(img);
+      } else {
+        container.textContent = fallbackText || "E";
+      }
+    }
+
+    function actualizarUsuarioSuperior(session) {
+      const usuario = session?.user;
+      abrirLogin.hidden = Boolean(usuario);
+      usuarioSuperior.hidden = !usuario;
+      abrirPerfilSuperior.hidden = !usuario;
+      if (usuario) {
+        const metadata = usuario.user_metadata || {};
+        paintAvatar(topAvatar, metadata.avatar_data_url, initials(metadata.full_name || metadata.name || usuario.email?.split("@")[0]));
+      }
+    }
+
+    function mostrarSesion(session) {
+      ecpCurrentSession = session;
+      const usuario = session?.user;
+      formulario.hidden = Boolean(usuario);
+      perfil.hidden = !usuario;
+      actualizarUsuarioSuperior(session);
+      if (usuario) {
+        const metadata = usuario.user_metadata || {};
+        const nombre = (metadata.full_name || metadata.name || metadata.user_name || "").trim();
+        const nombreVisible = nombre || (usuario.email ? usuario.email.split("@")[0] : "Mi cuenta ECP");
+        userEmail.textContent = usuario.email || "Correo no disponible";
+        profileNameInput.value = nombre;
+        profileNameShown.textContent = nombreVisible;
+        // El campo de modelo es de solo lectura; no es un selector con .options.
+        const avatarData = metadata.avatar_data_url || "";
+        paintAvatar(profileAvatar, avatarData, initials(nombreVisible));
+        paintAvatar(avatarPreview, pendingAvatarData || avatarData, initials(nombreVisible));
+        const proveedor = usuario.app_metadata?.provider || usuario.identities?.[0]?.provider || "email";
+        profileProvider.textContent = proveedor === "discord" ? "Discord" : proveedor === "email" ? "Correo electrónico y contraseña" : proveedor.charAt(0).toUpperCase() + proveedor.slice(1);
+        profileCreated.textContent = usuario.created_at ? new Date(usuario.created_at).toLocaleDateString("es-CO", { year:"numeric", month:"long", day:"numeric" }) : "No disponible";
+        mensaje("Tu sesión está activa.", "ok");
+      } else {
+        userEmail.textContent = "";
+        profileNameInput.value = "";
+        profileNameShown.textContent = "Mi cuenta ECP";
+        profileAvatar.textContent = "E";
+        paintAvatar(avatarPreview, null, "E");
+        paintAvatar(topAvatar, null, "E");
+        pendingAvatarData = null;
+        sourcePhotoImage = null;
+        cropControls.hidden = true;
+        photoInput.value = "";
+        profileProvider.textContent = "—";
+        profileCreated.textContent = "—";
+        mensaje("Elige Discord, Google o GitHub para iniciar sesión.");
+      }
+    }
+
+    abrirPerfilSuperior.addEventListener("click", () => {
+      tituloModal.textContent = "Mi perfil";
+      descripcionModal.textContent = "Consulta y actualiza los datos de tu cuenta ECP.";
+      formulario.hidden = true;
+      perfil.hidden = false;
+      if (!modal.open) modal.showModal();
+      mensaje("Tu sesión está activa.", "ok");
+    });
+
+    abrirLogin.addEventListener("click", () => abrirVentana(false));
+    cerrarModal.addEventListener("click", () => modal.close());
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) modal.close();
+    });
+
+    if (!window.supabase) {
+      mensaje("No se pudo cargar Supabase. Comprueba tu conexión y recarga.", "error");
+      bloquear(true);
+      abrirLogin.disabled = true;
+      return;
+    }
+
+    if (!SUPABASE_PUBLISHABLE_KEY.startsWith("sb_publishable_") ||
+        SUPABASE_PUBLISHABLE_KEY.length < 25) {
+      mensaje("La clave pública de Supabase no está configurada correctamente.", "error");
+      bloquear(true);
+      return;
+    }
+
+    try {
+      client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: true,
+          flowType: "pkce"
+        }
+      });
+    } catch (error) {
+      mensaje("No se pudo inicializar el acceso. Revisa la configuración.", "error");
+      bloquear(true);
+      return;
+    }
+
+
+    function renderAvatarCrop() {
+      if (!sourcePhotoImage) return;
+      // Imagen cuadrada y comprimida para evitar exceder el límite de metadatos de Supabase.
+      const size = 192;
+      const zoom = Number(cropZoom.value || 1);
+      const px = Number(cropX.value || 50) / 100;
+      const py = Number(cropY.value || 50) / 100;
+      const scale = Math.max(size / sourcePhotoImage.width, size / sourcePhotoImage.height) * zoom;
+      const drawW = sourcePhotoImage.width * scale;
+      const drawH = sourcePhotoImage.height * scale;
+      const maxX = Math.max(0, drawW - size);
+      const maxY = Math.max(0, drawH - size);
+      const dx = -(maxX * px);
+      const dy = -(maxY * py);
+      const canvas = document.createElement("canvas");
+      canvas.width = size; canvas.height = size;
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, size, size);
+      ctx.drawImage(sourcePhotoImage, dx, dy, drawW, drawH);
+      pendingAvatarData = canvas.toDataURL("image/jpeg", 0.68);
+      paintAvatar(avatarPreview, pendingAvatarData, "E");
+    }
+    [cropZoom, cropX, cropY].forEach(control => control.addEventListener("input", renderAvatarCrop));
+
+    photoInput.addEventListener("change", async () => {
+      const file = photoInput.files?.[0];
+      if (!file) return;
+      if (!file.type.startsWith("image/")) {
+        mensaje("Selecciona una imagen válida.", "error");
+        photoInput.value = "";
+        return;
+      }
+      try {
+        if (file.size > 12 * 1024 * 1024) throw new Error("La imagen supera 12 MB. Elige una más pequeña.");
+        const dataUrl = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => reject(new Error("No se pudo leer la imagen."));
+          reader.readAsDataURL(file);
+        });
+        const image = await new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.onerror = () => reject(new Error("No se pudo abrir la imagen."));
+          img.src = dataUrl;
+        });
+        sourcePhotoImage = image;
+        cropZoom.value = "1"; cropX.value = "50"; cropY.value = "50";
+        cropControls.hidden = false;
+        renderAvatarCrop();
+        mensaje("Ajusta el recorte y pulsa «Guardar cambios» para guardar la foto.", "ok");
+      } catch (error) {
+        mensaje(error.message || "No se pudo procesar la imagen.", "error");
+        photoInput.value = "";
+      }
+    });
+
+    removePhotoButton.addEventListener("click", () => {
+      pendingAvatarData = "";
+      sourcePhotoImage = null;
+      cropControls.hidden = true;
+      photoInput.value = "";
+      paintAvatar(avatarPreview, null, initials(profileNameInput.value));
+      mensaje("La foto se quitará al guardar los cambios. Pulsa «Guardar cambios» para confirmar.", "ok");
+    });
+
+    profileForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const nombre = profileNameInput.value.trim();
+      saveProfileButton.disabled = true;
+      mensaje("Guardando tu perfil...");
+      // Detecta el error genérico de red (en Safari aparece como "Load failed") venga
+      // como excepción o como el campo "error" que devuelven los métodos de Supabase,
+      // y lo convierte en un mensaje explicable. Antes solo se comprobaba alrededor de
+      // updateUser(), así que un fallo en getUser() o un error devuelto en vez de
+      // lanzado dejaban pasar el "Load failed" sin traducir.
+      const esFalloDeRed = (mensajeError) => /load failed|failed to fetch|network request failed|networkerror|fetch failed/i.test(String(mensajeError || ""));
+      const errorRedAmigable = () => new Error("Safari no pudo conectar con Supabase (fallo de red). Tus cambios no se confirmaron. Comprueba internet, desactiva temporalmente VPN/bloqueadores de contenido y vuelve a intentarlo. Si pasa también con otra red, revisa la URL/estado del proyecto Supabase y sus políticas de acceso.");
+      try {
+        // Verifica la sesión antes de intentar guardar; en Safari los errores de red
+        // pueden aparecer como el mensaje genérico "Load failed".
+        let currentData, currentError;
+        try {
+          ({ data: currentData, error: currentError } = await client.auth.getUser());
+        } catch (networkError) {
+          throw esFalloDeRed(networkError?.message) ? errorRedAmigable() : networkError;
+        }
+        if (currentError) throw esFalloDeRed(currentError.message) ? errorRedAmigable() : currentError;
+        if (!currentData?.user) {
+          throw new Error("No hay una sesión activa. Vuelve a iniciar sesión e inténtalo otra vez.");
+        }
+
+        // Actualiza solo los campos de ECP. Supabase fusiona estos campos con los
+        // metadatos existentes; no hace falta reenviar todos los datos de OAuth.
+        const updatedMetadata = {
+          full_name: nombre || null,
+          name: nombre || null
+        };
+        if (pendingAvatarData !== null) {
+          updatedMetadata.avatar_data_url = pendingAvatarData || null;
+        }
+
+        let updateResponse;
+        try {
+          updateResponse = await client.auth.updateUser({ data: updatedMetadata });
+        } catch (networkError) {
+          throw esFalloDeRed(networkError?.message) ? errorRedAmigable() : networkError;
+        }
+        const { data, error } = updateResponse || {};
+        if (error) throw esFalloDeRed(error.message) ? errorRedAmigable() : error;
+        if (!data?.user) {
+          throw new Error("Supabase no confirmó el guardado. Recarga la página e inténtalo otra vez.");
+        }
+        pendingAvatarData = null;
+        sourcePhotoImage = null;
+        cropControls.hidden = true;
+        photoInput.value = "";
+        mostrarSesion({ user: data.user });
+        mensaje(nombre ? "¡Perfil actualizado correctamente!" : "Nombre personalizado eliminado. Se mostrará el nombre disponible de tu cuenta.", "ok");
+      } catch (error) {
+        const detail = String(error?.message || error || "Error desconocido");
+        mensaje("No se pudo guardar el perfil: " + detail, "error");
+      } finally {
+        saveProfileButton.disabled = false;
+      }
+    });
+
+    async function iniciarOAuth(provider, nombre) {
+      bloquear(true);
+      mensaje("Conectando con " + nombre + "...");
+      try {
+        const { error } = await client.auth.signInWithOAuth({
+          provider,
+          options: { redirectTo: "https://ecp-tienda.vercel.app/" }
+        });
+        if (error) throw error;
+      } catch (error) {
+        mensaje("No se pudo conectar con " + nombre + ": " + error.message, "error");
+        bloquear(false);
+      }
+    }
+    discordButton.addEventListener("click", () => iniciarOAuth("discord", "Discord"));
+    googleButton.addEventListener("click", () => iniciarOAuth("google", "Google"));
+    githubButton.addEventListener("click", () => iniciarOAuth("github", "GitHub"));
+
+    async function cerrarSesion() {
+      cerrarSuperior.disabled = true;
+      logoutButton.disabled = true;
+      mensaje("Cerrando sesión...");
+      try {
+        const { error } = await client.auth.signOut();
+        if (error) throw error;
+        mostrarSesion(null);
+        modal.close();
+      } catch (error) {
+        mensaje("No se pudo cerrar sesión: " + error.message, "error");
+      } finally {
+        cerrarSuperior.disabled = false;
+        logoutButton.disabled = false;
+      }
+    }
+
+    logoutButton.addEventListener("click", cerrarSesion);
+    cerrarSuperior.addEventListener("click", cerrarSesion);
+
+    client.auth.onAuthStateChange((_event, session) => {
+      mostrarSesion(session);
+    });
+
+    client.auth.getSession()
+      .then(async ({ data, error }) => {
+        if (error) throw error;
+        let session = data.session;
+
+        // Respaldo para el retorno OAuth de Discord cuando la URL conserva ?code=...
+        // Supabase normalmente procesa el código durante la inicialización; solo
+        // intentamos intercambiarlo manualmente si todavía no existe una sesión.
+        const callbackUrl = new URL(window.location.href);
+        const oauthCode = callbackUrl.searchParams.get("code");
+        if (!session && oauthCode) {
+          const { data: exchanged, error: exchangeError } = await client.auth.exchangeCodeForSession(oauthCode);
+          if (exchangeError) {
+            console.error("Error al completar el retorno OAuth:", exchangeError.message);
+            mensaje("Discord autorizó el acceso, pero ECP no pudo completar la sesión. Revisa la URL de redirección de Supabase.", "error");
+            mostrarSesion(null);
+            return;
+          }
+          session = exchanged.session;
+          callbackUrl.searchParams.delete("code");
+          window.history.replaceState({}, document.title, callbackUrl.pathname + callbackUrl.search + callbackUrl.hash);
+        }
+
+        mostrarSesion(session);
+        if (session) {
+          mensaje("¡Sesión iniciada correctamente!", "ok");
+          if (window.location.search.includes("code=")) {
+            const cleanUrl = new URL(window.location.href);
+            cleanUrl.searchParams.delete("code");
+            window.history.replaceState({}, document.title, cleanUrl.pathname + cleanUrl.search + cleanUrl.hash);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error("No se pudo comprobar la sesión:", error);
+        mensaje("No se pudo comprobar la sesión. Recarga la página e inténtalo de nuevo.", "error");
+      });
+  })();
+  </script>
 </body>
 </html>
